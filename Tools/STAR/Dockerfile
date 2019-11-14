@@ -14,8 +14,8 @@ RUN apt-get update \
  && apt-get install -y \
     binutils \
     build-essential \
-    wget \
-    libz-dev 
+    libz-dev \
+    wget 
 
 # Install STAR aligner
 RUN wget https://github.com/alexdobin/STAR/archive/2.5.1b.tar.gz \
