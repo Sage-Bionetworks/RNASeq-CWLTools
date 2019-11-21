@@ -14,6 +14,8 @@ LABEL about.tags="scRNA"
 # install dependencies
 RUN apt-get update \
  && apt-get install -y \
+    binutils \
+    build-essential \
     clang-6.0 \
     curl \
     cython \
@@ -24,6 +26,7 @@ RUN apt-get update \
     liblzma-dev \
     python-numpy \
     python-pip \
+    samtools \
     wget
 
 # install python dependencies with pip
@@ -46,6 +49,16 @@ RUN rustup install 1.28.0 && rustup default 1.28.0
 # Download precompiled martian and unpack
 RUN wget https://github.com/martian-lang/martian/releases/download/v3.2.0/martian-v3.2.0-linux-x86_64.tar.gz \
   && tar -xf martian-v3.2.0-linux-x86_64.tar.gz && rm martian-v3.2.0-linux-x86_64.tar.gz
+
+# Install STAR aligner
+RUN wget https://github.com/alexdobin/STAR/archive/2.5.1b.tar.gz \
+ && tar -xf 2.5.1b.tar.gz \
+ && rm 2.5.1b.tar.gz \
+ && cd STAR-2.5.1b \
+ && make \
+ && cp bin/Linux_x86_64/STAR /usr/bin \
+ && cd .. \
+ && rm -rf STAR-2.5.1b
 
 # clone cellranger sourcecode repo, cd into this dir, and install cellranger
 RUN git clone https://github.com/10XGenomics/cellranger \
