@@ -23,10 +23,11 @@ RUN apt-get update \
     libbz2-dev \
     liblzma-dev \
     python-numpy \
-    python-pip
+    python-pip \
+    wget
 
 # install python dependencies with pip
-RUN pip install python-config docopts
+RUN pip install cffi docopts h5py lz4 pandas pyfasta pysam python-config pyvcf scipy sklearn tables
 
 # export path to golang
 ENV PATH="/usr/lib/go-1.10/bin:$PATH"
@@ -42,15 +43,17 @@ ENV PATH="/root/.cargo/bin:$PATH"
 # install correct version of rustup
 RUN rustup install 1.28.0 && rustup default 1.28.0
 
+# Download precompiled martian and unpack
+RUN wget https://github.com/martian-lang/martian/releases/download/v3.2.0/martian-v3.2.0-linux-x86_64.tar.gz \
+  && tar -xf martian-v3.2.0-linux-x86_64.tar.gz && rm martian-v3.2.0-linux-x86_64.tar.gz
+
 # clone cellranger sourcecode repo, cd into this dir, and install cellranger
 RUN git clone https://github.com/10XGenomics/cellranger \
   && cd cellranger && make 
 
 # setup environment to run cellranger
-ENV PATH /cellranger/bin/:/cellranger/lib/bin:/cellranger/tenkit/bin/:\
-    /cellranger/tenkit/lib/bin:/martian/bin/:$PATH
+ENV PATH /cellranger/bin/:/cellranger/lib/bin:/cellranger/tenkit/bin/:/cellranger/tenkit/lib/bin:/martian-v3.2.0-linux-x86_64/bin:$PATH
 
-ENV PYTHONPATH /cellranger/lib/python:/cellranger/tenkit/lib/python:\
-    /martian/adapters/python:$PYTHONPATH
+ENV PYTHONPATH /cellranger/lib/python:/cellranger/tenkit/lib/python:$PYTHONPATH
 
-ENV MROPATH /cellranger/mro/:/cellranger/tenkit/mro/
+ENV MROPATH /cellranger/mro:$MROPATH
