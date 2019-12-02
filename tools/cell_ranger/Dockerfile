@@ -18,9 +18,8 @@ RUN apt-get update \
     build-essential \
     clang-6.0 \
     curl \
-    cython \
     git \
-    golang-1.10-go \
+    golang-1.9 \
     libz-dev \
     libbz2-dev \
     liblzma-dev \
@@ -29,11 +28,19 @@ RUN apt-get update \
     samtools \
     wget
 
+# install the correct version of python
+ENV pyversion 2.7.13
+RUN wget https://www.python.org/ftp/python/${pyversion}/Python-${pyversion}.tgz && tar -xvf Python-${pyversion}.tgz
+WORKDIR Python-${pyversion}
+RUN ./configure
+RUN make
+ENV PATH $PATH:/Python-${pyversion}
+
 # install python dependencies with pip
-RUN pip install cffi docopts h5py lz4 pandas pyfasta pysam python-config pyvcf scipy sklearn tables
+RUN pip install cffi Cython==0.28.5 docopts h5py lz4 pandas pyfasta pysam python-config pyvcf scipy sklearn tables
 
 # export path to golang
-ENV PATH="/usr/lib/go-1.10/bin:$PATH"
+ENV PATH="/usr/lib/go-1.9/bin:$PATH"
 
 # download and install rustup
 RUN curl https://sh.rustup.rs -sSf \
@@ -61,12 +68,12 @@ RUN wget https://github.com/alexdobin/STAR/archive/2.5.1b.tar.gz \
  && rm -rf STAR-2.5.1b
 
 # clone cellranger sourcecode repo, cd into this dir, and install cellranger
-RUN git clone https://github.com/10XGenomics/cellranger \
+RUN git clone https://github.com/10XGenomics/cellranger.git \
   && cd cellranger && make 
 
 # setup environment to run cellranger
-ENV PATH /cellranger/bin/:/cellranger/lib/bin:/cellranger/tenkit/bin/:/cellranger/tenkit/lib/bin:/martian-v3.2.0-linux-x86_64/bin:$PATH
+ENV PATH /Python-2.7.13/cellranger/bin/:/Python-2.7.13/cellranger/lib/bin:/Python-2.7.13/cellranger/tenkit/bin/:/Python-2.7.13/cellranger/tenkit/lib/bin:/Python-2.7.13/martian-v3.2.0-linux-x86_64/bin:$PATH
 
-ENV PYTHONPATH /cellranger/lib/python:/cellranger/tenkit/lib/python:$PYTHONPATH
+ENV PYTHONPATH /Python-2.7.13/cellranger/lib/python:/Python-2.7.13/cellranger/tenkit/lib/python:$PYTHONPATH
 
-ENV MROPATH /cellranger/mro:$MROPATH
+ENV MROPATH /Python-2.7.13/cellranger/mro:$MROPATH
