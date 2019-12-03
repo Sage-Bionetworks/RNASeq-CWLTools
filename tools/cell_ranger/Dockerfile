@@ -20,9 +20,12 @@ RUN apt-get update \
     curl \
     git \
     golang-1.9 \
+    libatlas-base-dev \
     libz-dev \
     libbz2-dev \
     liblzma-dev \
+    liblz4-tool \
+    libopenblas-dev \
     python-numpy \
     python-pip \
     samtools \
@@ -37,7 +40,7 @@ RUN make
 ENV PATH $PATH:/Python-${pyversion}
 
 # install python dependencies with pip
-RUN pip install cffi Cython==0.28.5 docopts h5py lz4 pandas pyfasta pysam python-config pyvcf scipy sklearn tables
+RUN pip install cffi Cython==0.28.5 docopts h5py Jinja2 lz4 pandas pyfasta pysam python-config pyvcf scipy sklearn tables
 
 # export path to golang
 ENV PATH="/usr/lib/go-1.9/bin:$PATH"
@@ -66,6 +69,13 @@ RUN wget https://github.com/alexdobin/STAR/archive/2.5.1b.tar.gz \
  && cp bin/Linux_x86_64/STAR /usr/bin \
  && cd .. \
  && rm -rf STAR-2.5.1b
+
+# Install tsne
+RUN git clone https://github.com/danielfrg/tsne \
+ && cd tsne \
+ && make install \
+ && cd .. \
+ && rm -rf tsne
 
 # clone cellranger sourcecode repo, cd into this dir, and install cellranger
 RUN git clone https://github.com/10XGenomics/cellranger.git \
