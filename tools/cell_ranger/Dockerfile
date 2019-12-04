@@ -1,8 +1,8 @@
 # Base Image
-FROM ubuntu:latest
+FROM ubuntu:bionic
 
 # Metadata
-LABEL base_image="ubuntu:latest"
+LABEL base_image="ubuntu:bionic"
 LABEL software="Cell Ranger"
 LABEL software.version="3.0.2"
 LABEL about.documentation="https://github.com/10XGenomics/cellranger"
@@ -31,16 +31,22 @@ RUN apt-get update \
     samtools \
     wget
 
-# install the correct version of python
-ENV pyversion 2.7.13
-RUN wget https://www.python.org/ftp/python/${pyversion}/Python-${pyversion}.tgz && tar -xvf Python-${pyversion}.tgz
-WORKDIR Python-${pyversion}
-RUN ./configure
-RUN make
-ENV PATH $PATH:/Python-${pyversion}
-
 # install python dependencies with pip
-RUN pip install cffi Cython==0.28.5 docopts h5py Jinja2 lz4 pandas pyfasta pysam python-config pyvcf scipy sklearn tables
+RUN pip install \
+    cffi==1.13.2 \
+    Cython==0.28.5 \
+    docopts==0.6.1 \
+    h5py==2.10.0 \
+    Jinja2==2.10.3 \
+    lz4==2.2.1 \
+    pandas==0.24.2 \
+    pyfasta==0.5.2 \
+    pysam==0.15.3 \
+    python-config==0.1.2 \
+    pyvcf==0.6.8 \
+    scipy==1.2.2 \
+    sklearn==0.0 \
+    tables==3.5.2
 
 # export path to golang
 ENV PATH="/usr/lib/go-1.9/bin:$PATH"
@@ -71,19 +77,19 @@ RUN wget https://github.com/alexdobin/STAR/archive/2.5.1b.tar.gz \
  && rm -rf STAR-2.5.1b
 
 # Install tsne
-RUN git clone https://github.com/danielfrg/tsne \
+RUN git clone https://github.com/wpoehlm/tsne.git \
  && cd tsne \
  && make install \
  && cd .. \
  && rm -rf tsne
 
 # clone cellranger sourcecode repo, cd into this dir, and install cellranger
-RUN git clone https://github.com/10XGenomics/cellranger.git \
+RUN git clone https://github.com/wpoehlm/cellranger.git \
   && cd cellranger && make 
 
 # setup environment to run cellranger
-ENV PATH /Python-2.7.13/cellranger/bin/:/Python-2.7.13/cellranger/lib/bin:/Python-2.7.13/cellranger/tenkit/bin/:/Python-2.7.13/cellranger/tenkit/lib/bin:/Python-2.7.13/martian-v3.2.0-linux-x86_64/bin:$PATH
+ENV PATH /cellranger/bin/:/cellranger/lib/bin:/cellranger/tenkit/bin/:/cellranger/tenkit/lib/bin:/martian-v3.2.0-linux-x86_64/bin:$PATH
 
-ENV PYTHONPATH /Python-2.7.13/cellranger/lib/python:/Python-2.7.13/cellranger/tenkit/lib/python:$PYTHONPATH
+ENV PYTHONPATH /cellranger/lib/python:/cellranger/tenkit/lib/python:$PYTHONPATH
 
-ENV MROPATH /Python-2.7.13/cellranger/mro:$MROPATH
+ENV MROPATH /cellranger/mro:$MROPATH
