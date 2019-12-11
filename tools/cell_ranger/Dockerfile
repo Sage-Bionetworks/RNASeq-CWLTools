@@ -74,17 +74,13 @@ RUN wget https://github.com/martian-lang/martian/releases/download/v3.2.0/martia
 RUN wget https://github.com/alexdobin/STAR/archive/2.5.1b.tar.gz \
  && tar -xf 2.5.1b.tar.gz \
  && rm 2.5.1b.tar.gz \
- && cd STAR-2.5.1b \
- && make \
- && cp bin/Linux_x86_64/STAR /usr/bin \
- && cd .. \
+ && make -C STAR-2.5.1b \
+ && cp STAR-2.5.1b/bin/Linux_x86_64/STAR /usr/bin \
  && rm -rf STAR-2.5.1b
 
 # Install tsne
 RUN git clone https://github.com/wpoehlm/tsne.git \
- && cd tsne \
- && make install \
- && cd .. \
+ && make -C tsne install \
  && rm -rf tsne
 
 # clone cellranger sourcecode repo, cd into this dir, and install cellranger
