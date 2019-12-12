@@ -80,12 +80,17 @@ RUN wget https://github.com/alexdobin/STAR/archive/2.5.1b.tar.gz \
 
 # Install tsne
 RUN git clone https://github.com/wpoehlm/tsne.git \
- && make -C tsne install \
+ && cd tsne \
+ && git checkout 075de5f641f7e222e40b8c4d407f95192e179228 \
+ && make install \
+ && cd .. \
  && rm -rf tsne
 
 # clone cellranger sourcecode repo, cd into this dir, and install cellranger
-RUN git clone https://github.com/wpoehlm/cellranger.git \
-  && cd cellranger && make 
+RUN git clone https://github.com/wpoehlm/cellranger.git \ 
+ && cd cellranger \
+ && git checkout 5f5a6293bbc067e1965e50f0277286914b96c908 \
+ && make 
 
 # setup environment to run cellranger
 ENV PATH /cellranger/bin/:/cellranger/lib/bin:/cellranger/tenkit/bin/:/cellranger/tenkit/lib/bin:/martian-v3.2.0-linux-x86_64/bin:$PATH
