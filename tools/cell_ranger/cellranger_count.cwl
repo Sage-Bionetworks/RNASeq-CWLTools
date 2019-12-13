@@ -9,29 +9,35 @@ inputs:
     type: Directory
   - id: genome_dir
     type: Directory
+  - id: chemistry
+    type: string?
+    default: threeprime
+  - id: sample_id
+    type: string?
+    default: test
 outputs:
   - id: output
-    type: Directory
+    type: File
     outputBinding:
-      glob: '*'
+      glob: '$(inputs.sample_id)/outs/molecule_info.h5'
 label: cellr_count
 arguments:
-  - position: 0
+  - position: 1
     prefix: '--id='
     separate: false
-    valueFrom: test
-  - position: 1
+    valueFrom: $(inputs.sample_id)
+  - position: 2
     prefix: '--fastqs='
     separate: false
     valueFrom: $(inputs.fastq_dir)
-  - position: 2
+  - position: 3
     prefix: '--transcriptome='
     separate: false
     valueFrom: $(inputs.genome_dir)
-  - position: 3
+  - position: 4
     prefix: '--chemistry='
     separate: false
-    valueFrom: threeprime
+    valueFrom: $(inputs.chemistry)
 requirements:
   - class: DockerRequirement
     dockerPull: sagebionetworks/cellranger
