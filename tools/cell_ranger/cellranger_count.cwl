@@ -2,7 +2,7 @@ class: CommandLineTool
 cwlVersion: v1.0
 $namespaces:
   sbg: 'https://www.sevenbridges.com'
-id: cellr_count
+id: cellranger count
 baseCommand: ['cellranger', 'count']
 inputs:
   - id: fastq_dir

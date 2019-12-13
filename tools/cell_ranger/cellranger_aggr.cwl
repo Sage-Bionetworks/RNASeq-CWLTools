@@ -1,6 +1,6 @@
 class: CommandLineTool
 cwlVersion: v1.0
-id: cellr_count
+id: cellranger aggr
 baseCommand: ['cellranger', 'aggr']
 inputs:
   - id: molecule_h5
