@@ -4,7 +4,7 @@ id: cellranger aggr
 baseCommand: ['cellranger', 'aggr']
 inputs:
   - id: molecule_h5
-    type: File
+    type: File[]
   - id: sample_csv
     type: File
 outputs:
