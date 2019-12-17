@@ -20,6 +20,11 @@ outputs:
     type: File[]
     outputBinding:
       glob: '$(inputs.sample_id)/outs/molecule_info.h5'
+      outputEval: |
+        ${
+          self[0].basename = inputs.sample_id + '_molecule_info.h5';
+          return self[0]
+        }
 label: cellr_count
 arguments:
   - position: 1
@@ -38,6 +43,10 @@ arguments:
     prefix: '--chemistry='
     separate: false
     valueFrom: $(inputs.chemistry)
+  - position: 5
+    prefix: '--sample='
+    separate: false
+    valueFrom: $(inputs.sample_id)
 requirements:
   - class: DockerRequirement
     dockerPull: sagebionetworks/cellranger
