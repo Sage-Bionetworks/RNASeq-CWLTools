@@ -17,7 +17,7 @@ inputs:
     default: test
 outputs:
   - id: output
-    type: File[]
+    type: File
     outputBinding:
       glob: '$(inputs.sample_id)/outs/molecule_info.h5'
       outputEval: |
