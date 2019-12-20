@@ -8,11 +8,11 @@ inputs:
   - id: sample_csv
     type: File
 outputs:
-  - id: output
-    type: Directory
+  - id: combined_output
+    type: File
     outputBinding:
-      glob: '*combined'
-label: cellr_aggr
+      glob: '*combined.mri.tgz'
+label: cellranger aggr
 arguments:
   - position: 1
     prefix: '--id='
