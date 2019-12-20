@@ -11,7 +11,7 @@ outputs:
   - id: combined_output
     type: File
     outputBinding:
-      glob: '*combined.mri.tgz'
+      glob: 'combined/combined.mri.tgz'
 label: cellranger aggr
 arguments:
   - position: 1
