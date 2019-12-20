@@ -1,7 +1,5 @@
 class: CommandLineTool
 cwlVersion: v1.0
-$namespaces:
-  sbg: 'https://www.sevenbridges.com'
 id: cellranger count
 baseCommand: ['cellranger', 'count']
 inputs:
@@ -12,17 +10,14 @@ inputs:
   - id: chemistry
     type: string?
     default: threeprime
-  - id: sample_id
-    type: string?
-    default: test
 outputs:
   - id: output
     type: File
     outputBinding:
-      glob: '$(inputs.sample_id)/outs/molecule_info.h5'
+      glob: '$(inputs.fastq_dir.basename)/outs/molecule_info.h5'
       outputEval: |
         ${
-          self[0].basename = inputs.sample_id + '_molecule_info.h5';
+          self[0].basename = inputs.fastq_dir.basename + '_molecule_info.h5';
           return self[0]
         }
 label: cellr_count
@@ -30,7 +25,7 @@ arguments:
   - position: 1
     prefix: '--id='
     separate: false
-    valueFrom: $(inputs.sample_id)
+    valueFrom: $(inputs.fastq_dir.basename)
   - position: 2
     prefix: '--fastqs='
     separate: false
@@ -46,7 +41,7 @@ arguments:
   - position: 5
     prefix: '--sample='
     separate: false
-    valueFrom: $(inputs.sample_id)
+    valueFrom: $(inputs.fastq_dir.basename)
 requirements:
   - class: DockerRequirement
     dockerPull: sagebionetworks/cellranger
