@@ -31,4 +31,8 @@ requirements:
       - $(inputs.sample_csv)
       - $(inputs.molecule_h5)
   - class: ResourceRequirement
-    $mixin: resources-cellranger.yaml
+    ramMin: 60000
+    coresMin: 15
+    tmpdirMin: 225000
+    outdirMin: 225000
+
