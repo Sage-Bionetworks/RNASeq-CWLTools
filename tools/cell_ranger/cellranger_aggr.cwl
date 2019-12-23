@@ -30,3 +30,5 @@ requirements:
     listing:
       - $(inputs.sample_csv)
       - $(inputs.molecule_h5)
+  - class: ResourceRequirement
+    $mixin: resources-cellranger.yaml

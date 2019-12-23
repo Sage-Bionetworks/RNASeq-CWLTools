@@ -46,4 +46,5 @@ requirements:
   - class: DockerRequirement
     dockerPull: sagebionetworks/cellranger
   - class: InlineJavascriptRequirement
-
+  - class: ResourceRequirement
+    $mixin: resources-cellranger.yaml
