@@ -1,6 +1,6 @@
 class: CommandLineTool
 cwlVersion: v1.0
-id: cellranger count
+id: cellranger_count
 baseCommand: ['cellranger', 'count']
 inputs:
   - id: fastq_dir
@@ -46,9 +46,4 @@ requirements:
   - class: DockerRequirement
     dockerPull: sagebionetworks/cellranger
   - class: InlineJavascriptRequirement
-  - class: ResourceRequirement
-    ramMin: 60000
-    coresMin: 15
-    tmpdirMin: 225000
-    outdirMin: 225000
 

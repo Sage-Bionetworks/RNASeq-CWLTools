@@ -1,6 +1,6 @@
 class: CommandLineTool
 cwlVersion: v1.0
-id: cellranger aggr
+id: cellranger_aggr
 baseCommand: ['cellranger', 'aggr']
 inputs:
   - id: molecule_h5
@@ -30,9 +30,3 @@ requirements:
     listing:
       - $(inputs.sample_csv)
       - $(inputs.molecule_h5)
-  - class: ResourceRequirement
-    ramMin: 60000
-    coresMin: 15
-    tmpdirMin: 225000
-    outdirMin: 225000
-
